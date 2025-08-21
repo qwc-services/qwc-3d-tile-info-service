@@ -24,16 +24,17 @@ class ApiTestCase(unittest.TestCase):
         response = self.app.get('/objinfo?' + urlencode({'tileset': 'buildings', 'objectid': 'DEHE06200002zcog'}))
         self.assertEqual(200, response.status_code, "Status code is not OK")
         result = json.loads(response.data)
-        self.assertIn('Beschreibung', result)
-        self.assertIn('Dokumentation', result)
-        self.assertIn('Gebäudefunktion', result)
+        aliases = list(map(lambda entry: entry['alias'], result))
+        self.assertIn('Beschreibung', aliases)
+        self.assertIn('Dokumentation', aliases)
+        self.assertIn('Gebäudefunktion', aliases)
         self.assertNotIn('gml_id', result)
 
     def test_missing_tileinfo_gpkg(self):
         response = self.app.get('/objinfo?' + urlencode({'tileset': 'trees', 'objectid': '1234'}))
         self.assertEqual(200, response.status_code, "Status code is not OK")
         result = json.loads(response.data)
-        self.assertEqual(result, {})
+        self.assertEqual(result, [])
 
     def test_existing_default_stylesheet_gpkg(self):
         response = self.app.get('/stylesheet?' + urlencode({'tileset': 'buildings'}))
@@ -64,11 +65,12 @@ class ApiTestCase(unittest.TestCase):
         response = self.app.get('/objinfo?' + urlencode({'tileset': 'countries', 'objectid': '6'}))
         self.assertEqual(200, response.status_code, "Status code is not OK")
         result = json.loads(response.data)
-        self.assertIn('GDP per Year', result)
-        self.assertIn('economy', result)
-        self.assertIn('name', result)
-        self.assertNotIn('ogc_fid', result)
-        self.assertNotIn('level', result)
+        aliases = list(map(lambda entry: entry['alias'], result))
+        self.assertIn('GDP per Year', aliases)
+        self.assertIn('economy', aliases)
+        self.assertIn('name', aliases)
+        self.assertNotIn('ogc_fid', aliases)
+        self.assertNotIn('level', aliases)
 
     def test_existing_named_stylesheet_postgres(self):
         response = self.app.get('/stylesheet?' + urlencode({'tileset': 'countries', 'stylename': 'countrycolor'}))

@@ -72,12 +72,12 @@ class ObjInfo(Resource):
 
         if not dataset_config:
             app.logger.debug("No dataset configured for tileset %s" % tileset)
-            return jsonify({})
+            return jsonify([])
 
         attribute_aliases = dataset_config.get("attribute_aliases", {})
         attribute_blacklist = dataset_config.get("attribute_blacklist", [])
 
-        attributes = {}
+        attributes = []
         if dataset_config.get("type") == "gpkg":
 
             ds = ogr.Open(dataset_config.get("dataset"))
@@ -102,7 +102,7 @@ class ObjInfo(Resource):
             feature = layer.GetNextFeature()
             if not feature:
                 app.logger.debug("No matches for %s" % filter_expr)
-                return jsonify({})
+                return jsonify([])
 
             defn = layer.GetLayerDefn()
             for i in range(defn.GetFieldCount()):
@@ -110,7 +110,11 @@ class ObjInfo(Resource):
                 field_name = field_defn.GetName()
                 if field_name in attribute_blacklist:
                     continue
-                attributes[attribute_aliases.get(field_name, field_name)] = feature.GetField(field_name)
+                attributes.append({
+                    "name": field_name,
+                    "alias": attribute_aliases.get(field_name, field_name),
+                    "value": feature.GetField(field_name)
+                })
         elif dataset_config.get("type") == "postgres":
             conn = psycopg2.connect(dataset_config.get("dataset"))
             cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -135,7 +139,11 @@ class ObjInfo(Resource):
             for field_name, value in row.items():
                 if field_name in attribute_blacklist or field_name == geom_column:
                     continue
-                attributes[attribute_aliases.get(field_name, field_name)] = value
+                attributes.append({
+                    "name": field_name,
+                    "alias": attribute_aliases.get(field_name, field_name),
+                    "value": value
+                })
             cursor.close()
             conn.close()
         else:
