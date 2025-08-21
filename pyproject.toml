@@ -1,6 +1,6 @@
 [project]
 name = "qwc-3d-tile-info-service"
-version = "v2025.07.10"
+version = "v2025.08.21"
 description = "QWC 3D Tile Info Service"
 readme = "README.md"
 requires-python = ">=3.10"
