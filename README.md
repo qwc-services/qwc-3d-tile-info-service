@@ -7,7 +7,7 @@ QWC 3D Tile Info Service
 Provides additional data for 3D tiles tilesets, sourced from a GeoPackage or Postgres dataset:
 
 - Object info, via `/objinfo?tileset=<tileset_name>&objectid=<object_id>`
-- 3D tiles stylesheets, via `/stylesheet?tileset=<tileset_name>&stylename=<stylename>`
+- 3D tiles stylesheets, generated from 2D SLD styles, via `/stylesheet?tileset=<tileset_name>&stylename=<stylename>`
 
 This service implements a backend which can be referenced as `tileInfoServiceUrl` in the QWC View3D plugin configuration, `tileset_name` being the name of the tileset as configured in the `tiles3d` dataset entries in the themes configuration, see [View3D configuration](https://qwc-services.github.io/master/references/qwc2_plugins/#view3d).
 
