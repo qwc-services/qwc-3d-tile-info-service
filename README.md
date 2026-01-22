@@ -17,7 +17,7 @@ Configuration
 The static config files are stored as JSON files in `$CONFIG_PATH` with subdirectories for each tenant,
 e.g. `$CONFIG_PATH/default/*.json`. The default tenant name is `default`.
 
-### TileInfo Service config
+### JSON config
 
 * [JSON schema](schemas/qwc-3d-tile-info-service.json)
 * File location: `$CONFIG_PATH/<tenant>/tileinfoConfig.json`
@@ -55,33 +55,39 @@ Example:
 }
 ```
 
+See the [schema definition](schemas/qwc-3d-tile-info-service.json) for the full set of supported config variables.
+
 ### Environment variables
 
 Config options in the config file can be overridden by equivalent uppercase environment variables.
 
-Usage
------
+Run locally
+-----------
 
-Run as
+Install dependencies and run:
 
-    python src/server.py
+    # Install python3-gdal in system package
+    apt/dnf install python3-gdal
+    
+    # Setup venv with --system-site-packages for python3-gdal
+    uv venv --system-site-packages .venv
+    
+    export CONFIG_PATH=<CONFIG_PATH>
+    uv run src/server.py
+
+To use configs from a `qwc-docker` setup, set `CONFIG_PATH=<...>/qwc-docker/volumes/config`.
+
+Set `FLASK_DEBUG=1` for additional debug output.
+
+Set `FLASK_RUN_PORT=<port>` to change the default port (default: `5000`).
 
 API documentation:
 
-    http://localhost:5016/api/
+    http://localhost:$FLASK_RUN_PORT/api/
     
 Docker usage
 ------------
 
+The Docker image is published on [Dockerhub](https://hub.docker.com/r/sourcepole/qwc-3d-tile-info-service).
+
 See sample [docker-compose.yml](https://github.com/qwc-services/qwc-docker/blob/master/docker-compose-example.yml) of [qwc-docker](https://github.com/qwc-services/qwc-docker).
-
-Development
------------
-
-Install dependencies and run service:
-
-    uv run src/server.py
-
-With config path:
-
-    CONFIG_PATH=/PATH/TO/CONFIGS/ uv run src/server.py
