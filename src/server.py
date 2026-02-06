@@ -5,9 +5,8 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 from flask import Flask, request, jsonify, abort
-from flask_restx import Resource, reqparse
+from flask_restx import Api, Resource, reqparse
 from osgeo import ogr
-from qwc_services_core.api import Api
 from qwc_services_core.api import CaseInsensitiveArgument
 from qwc_services_core.app import app_nocache
 from qwc_services_core.auth import auth_manager, optional_auth
