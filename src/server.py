@@ -28,10 +28,6 @@ app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
 # disable verbose 404 error message
 app.config['ERROR_404_HELP'] = False
-app.config['RESTX_MASK_SWAGGER'] = False
-app.config['ERROR_INCLUDE_MESSAGE'] = True
-app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['DEBUG'] = True
 
 auth = auth_manager(app, api)
 
