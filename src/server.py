@@ -5,9 +5,9 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 from flask import Flask, request, jsonify, abort
-from flask_restx import Api, Resource, reqparse
+from flask_restx import Resource, reqparse
 from osgeo import ogr
-from qwc_services_core.api import CaseInsensitiveArgument
+from qwc_services_core.api import Api, CaseInsensitiveArgument
 from qwc_services_core.app import app_nocache
 from qwc_services_core.auth import auth_manager, optional_auth
 from qwc_services_core.tenant_handler import (
@@ -48,17 +48,13 @@ stylesheet_parser.add_argument('stylename', required=False)
 # routes
 @api.route('/objinfo')
 class ObjInfo(Resource):
-    """ObjInfo class
-
-    Returns infos for 3D Tile objects.
-    """
-
     @api.doc('objinfo')
     @api.param('tileset', 'The tileset name')
     @api.param('objectid', 'The object id')
     @api.expect(objinfo_parser)
     @optional_auth
     def get(self):
+        """ Get infos for 3D Tile objects """
         args = objinfo_parser.parse_args()
         tileset = args["tileset"]
         objectid = args["objectid"]
@@ -162,6 +158,7 @@ class Stylesheet(Resource):
     @api.expect(stylesheet_parser)
     @optional_auth
     def get(self):
+        """ Get tileset styles """
         args = stylesheet_parser.parse_args()
         tileset = args["tileset"]
         stylename = args["stylename"] or "default"
